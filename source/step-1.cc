@@ -136,7 +136,7 @@ third_grid()
   std::ofstream out_refined_locally("grid-5.svg");
 
   grid_out.write_svg(triangulation, out_refined_locally);
-  std::cout << "Grid written to grid-4.svg" << std::endl;
+  std::cout << "Grid written to grid-5.svg" << std::endl;
 }
 
 
