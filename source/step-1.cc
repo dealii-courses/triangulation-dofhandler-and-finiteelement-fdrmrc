@@ -120,7 +120,7 @@ third_grid()
           for (const auto v : cell->vertex_indices())
             {
               const double distance_from_corner =
-                corner.distance(cell->vertex(v));
+                corner.distance(cell->center(v));
 
               if (std::fabs(distance_from_corner) <= (1.0) / (3.0))
                 {
