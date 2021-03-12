@@ -76,7 +76,7 @@ make_grid(Triangulation<2> &triangulation)
 void
 distribute_dofs(DoFHandler<2> &dof_handler)
 {
-  static const FE_Q<2> finite_element(2); // degree of poly 1: bilinear element
+  static const FE_Q<2> finite_element(1); // degree of poly 1: bilinear element
   dof_handler.distribute_dofs(
     finite_element); // we have associated a degree of freedom with a global
                      // number to each vertex
@@ -130,13 +130,13 @@ make_grid_square(Triangulation<2> &square)
 int
 main()
 {
-  Triangulation<2> triangulation; 
-  make_grid(triangulation);
+  // Triangulation<2> triangulation;
+  // make_grid(triangulation);
 
-DoFHandler<2> dof_handler(triangulation);
+  // DoFHandler<2> dof_handler(triangulation);
 
-  distribute_dofs(dof_handler);
-  renumber_dofs(dof_handler);
+  // distribute_dofs(dof_handler);
+  // renumber_dofs(dof_handler);
 
   Triangulation<2> square;
   make_grid_square(square);
