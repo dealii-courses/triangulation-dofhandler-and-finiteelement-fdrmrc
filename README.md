@@ -93,4 +93,5 @@
 
 
 
-
+* * * * *
+## .svg output files with grids and sparsity pattern are in folder images
