@@ -37,7 +37,8 @@
 using namespace dealii;
 
 
-void make_grid(Triangulation<2> &triangulation)
+void
+make_grid(Triangulation<2> &triangulation)
 {
   const Point<2> center(1, 0);
   const double   inner_radius = 0.5, outer_radius = 1.0;
@@ -72,26 +73,37 @@ void make_grid(Triangulation<2> &triangulation)
 }
 
 
-void distribute_dofs(DoFHandler<2> &dof_handler)
+void
+distribute_dofs(DoFHandler<2> &dof_handler)
 {
-  static const FE_Q<2> finite_element(1);
-  dof_handler.distribute_dofs(finite_element);
+  static const FE_Q<2> finite_element(2); // degree of poly 1: bilinear element
+  dof_handler.distribute_dofs(
+    finite_element); // we have associated a degree of freedom with a global
+                     // number to each vertex
 
   DynamicSparsityPattern dynamic_sparsity_pattern(dof_handler.n_dofs(),
                                                   dof_handler.n_dofs());
+
+
 
   DoFTools::make_sparsity_pattern(dof_handler, dynamic_sparsity_pattern);
 
   SparsityPattern sparsity_pattern;
   sparsity_pattern.copy_from(dynamic_sparsity_pattern);
-
+  std::cout << "Number of entries per row in the sparsity pattern"
+            << "\n";
+  for (unsigned int i = 0; i < dof_handler.n_dofs(); ++i)
+    {
+      std::cout << sparsity_pattern.row_length(i) << "\n";
+    }
   std::ofstream out("sparsity_pattern1.svg");
   sparsity_pattern.print_svg(out);
 }
 
 
 
-void renumber_dofs(DoFHandler<2> &dof_handler)
+void
+renumber_dofs(DoFHandler<2> &dof_handler)
 {
   DoFRenumbering::Cuthill_McKee(dof_handler);
 
@@ -108,14 +120,29 @@ void renumber_dofs(DoFHandler<2> &dof_handler)
 
 
 
+void
+make_grid_square(Triangulation<2> &square)
+{
+  GridGenerator::hyper_cube(square, -1, 1);
+  square.refine_global(3);
+}
+
 int
 main()
 {
-  Triangulation<2> triangulation;
+  Triangulation<2> triangulation; 
   make_grid(triangulation);
 
-  DoFHandler<2> dof_handler(triangulation);
+DoFHandler<2> dof_handler(triangulation);
 
   distribute_dofs(dof_handler);
   renumber_dofs(dof_handler);
+
+  Triangulation<2> square;
+  make_grid_square(square);
+
+  DoFHandler<2> dof_handler_square(square);
+
+  distribute_dofs(dof_handler_square);
+  renumber_dofs(dof_handler_square);
 }
