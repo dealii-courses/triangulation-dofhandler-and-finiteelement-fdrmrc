@@ -38,6 +38,24 @@ using namespace dealii;
 
 
 void
+show_statistics(const SparsityPattern &sparsity_pattern)
+{
+  Vector<int> v;
+  double      sum = 0.0;
+  for (unsigned int i = 0; i < sparsity_pattern.n_cols(); ++i)
+    {
+      sum += sparsity_pattern.row_length(i);
+    }
+
+  std::cout << "Statistics for the current sparsity pattern:"
+            << "\n"
+            << "bandwidth: " << sparsity_pattern.bandwidth() << "\t"
+            << " number of unknowns : " << sparsity_pattern.n_cols() << "\t"
+            << "average number of of entries per row"
+            << sum / sparsity_pattern.n_cols() << "\n";
+}
+
+void
 make_grid(Triangulation<2> &triangulation)
 {
   const Point<2> center(1, 0);
@@ -77,6 +95,10 @@ void
 distribute_dofs(DoFHandler<2> &dof_handler)
 {
   static const FE_Q<2> finite_element(1); // degree of poly 1: bilinear element
+  std::cout << "Value at (1,1) "
+            << finite_element.shape_value(2, Point<2>(1, 1)) << "\n";
+
+
   dof_handler.distribute_dofs(
     finite_element); // we have associated a degree of freedom with a global
                      // number to each vertex
@@ -92,10 +114,16 @@ distribute_dofs(DoFHandler<2> &dof_handler)
   sparsity_pattern.copy_from(dynamic_sparsity_pattern);
   std::cout << "Number of entries per row in the sparsity pattern"
             << "\n";
+  // SparseMatrix<double> system_matrix;
+  // system_matrix.reinit(sparsity_pattern);
+
   for (unsigned int i = 0; i < dof_handler.n_dofs(); ++i)
     {
-      std::cout << sparsity_pattern.row_length(i) << "\n";
+      std::cout << "Row length: " << sparsity_pattern.row_length(i) << "\n";
     }
+
+
+  show_statistics(sparsity_pattern);
   std::ofstream out("sparsity_pattern1.svg");
   sparsity_pattern.print_svg(out);
 }
@@ -114,10 +142,13 @@ renumber_dofs(DoFHandler<2> &dof_handler)
   SparsityPattern sparsity_pattern;
   sparsity_pattern.copy_from(dynamic_sparsity_pattern);
 
+
+  std::cout << "Line 42: " << sparsity_pattern.row_length(42) << "\n";
+
+  show_statistics(sparsity_pattern);
   std::ofstream out("sparsity_pattern2.svg");
   sparsity_pattern.print_svg(out);
 }
-
 
 
 void
@@ -127,16 +158,18 @@ make_grid_square(Triangulation<2> &square)
   square.refine_global(3);
 }
 
+
+
 int
 main()
 {
-  // Triangulation<2> triangulation;
-  // make_grid(triangulation);
+  Triangulation<2> triangulation;
+  make_grid(triangulation);
 
-  // DoFHandler<2> dof_handler(triangulation);
+  DoFHandler<2> dof_handler(triangulation);
 
-  // distribute_dofs(dof_handler);
-  // renumber_dofs(dof_handler);
+  distribute_dofs(dof_handler);
+  renumber_dofs(dof_handler);
 
   Triangulation<2> square;
   make_grid_square(square);
