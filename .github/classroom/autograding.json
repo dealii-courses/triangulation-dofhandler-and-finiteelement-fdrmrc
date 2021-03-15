@@ -1,0 +1,84 @@
+{
+  "tests": [
+    {
+      "name": "Indent",
+      "setup": "",
+      "run": ".scripts/dr.sh .scripts/check_indentation.sh",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Build",
+      "setup": "",
+      "run": ".scripts/dr.sh \"mkdir build; cd build; cmake -GNinja ..; ninja\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 5
+    },
+    {
+      "name": "Step1 - Mark1",
+      "setup": "",
+      "run": ".scripts/dr.sh \"cd build; ./gtest --gtest_filter=Step1.Mark1\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Step1 - Mark2",
+      "setup": "",
+      "run": ".scripts/dr.sh \"cd build; ./gtest --gtest_filter=Step1.Mark2\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Step1 - Mark3",
+      "setup": "",
+      "run": ".scripts/dr.sh \"cd build; ./gtest --gtest_filter=Step1.Mark3\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Step1 - Mark4",
+      "setup": "",
+      "run": ".scripts/dr.sh \"cd build; ./gtest --gtest_filter=Step1.Mark4\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Step1 - Mark5",
+      "setup": "",
+      "run": ".scripts/dr.sh \"cd build; ./gtest --gtest_filter=Step1.Mark5\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Step1 - Mark6",
+      "setup": "",
+      "run": ".scripts/dr.sh \"cd build; ./gtest --gtest_filter=Step1.Mark6\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    }
+  ]
+}
