@@ -94,9 +94,10 @@ make_grid(Triangulation<2> &triangulation)
 void
 distribute_dofs(DoFHandler<2> &dof_handler)
 {
-  static const FE_Q<2> finite_element(1); // degree of poly 1: bilinear element
-  std::cout << "Value at (1,1) "
-            << finite_element.shape_value(2, Point<2>(1, 1)) << "\n";
+  static const FE_Q<2> finite_element(
+    1); // degree of poly 1: bilinear element, 2:bi-quadratic element, ...
+  // std::cout << "Value at (1,1) "
+  //           << finite_element.shape_value(2, Point<2>(1, 1)) << "\n";
 
 
   dof_handler.distribute_dofs(
@@ -119,13 +120,26 @@ distribute_dofs(DoFHandler<2> &dof_handler)
 
   for (unsigned int i = 0; i < dof_handler.n_dofs(); ++i)
     {
-      std::cout << "Row length: " << sparsity_pattern.row_length(i) << "\n";
+      std::cout << "Length of " << i << "-th row"
+                << "\t" << sparsity_pattern.row_length(i) << "\n";
     }
 
 
   show_statistics(sparsity_pattern);
   std::ofstream out("sparsity_pattern1.svg");
   sparsity_pattern.print_svg(out);
+
+
+  std::cout
+    << "Printing all the non-zero entries for row 42 before renumbering: "
+    << "\n";
+
+  auto start_row_42 = sparsity_pattern.begin(42);
+  auto end_row_42   = sparsity_pattern.end(42);
+  for (auto it = start_row_42; it != end_row_42; ++it)
+    {
+      std::cout << (*it).column() << "\n";
+    }
 }
 
 
@@ -143,11 +157,21 @@ renumber_dofs(DoFHandler<2> &dof_handler)
   sparsity_pattern.copy_from(dynamic_sparsity_pattern);
 
 
-  std::cout << "Line 42: " << sparsity_pattern.row_length(42) << "\n";
+  std::cout << "Row length for Line 42: " << sparsity_pattern.row_length(42)
+            << "\n";
 
-  show_statistics(sparsity_pattern);
+  show_statistics(sparsity_pattern); // Bonus
   std::ofstream out("sparsity_pattern2.svg");
   sparsity_pattern.print_svg(out);
+
+  std::cout
+    << "Printing all the non-zero entries for row 42 after renumbering: "
+    << "\n";
+  for (auto it = sparsity_pattern.begin(42); it != sparsity_pattern.end(42);
+       ++it)
+    {
+      std::cout << (*it).column() << "\n";
+    }
 }
 
 
@@ -171,11 +195,13 @@ main()
   distribute_dofs(dof_handler);
   renumber_dofs(dof_handler);
 
-  Triangulation<2> square;
-  make_grid_square(square);
 
-  DoFHandler<2> dof_handler_square(square);
+  // //Test with a square
+  // Triangulation<2> square;
+  // make_grid_square(square);
 
-  distribute_dofs(dof_handler_square);
-  renumber_dofs(dof_handler_square);
+  // DoFHandler<2> dof_handler_square(square);
+
+  // distribute_dofs(dof_handler_square);
+  // renumber_dofs(dof_handler_square);
 }

@@ -194,7 +194,7 @@ fourth_grid()
   triangulation.reset_all_manifolds();
   triangulation.set_all_manifold_ids_on_boundary(0);
   triangulation.set_manifold(0, manifold);
-  triangulation.refine_global(2);
+  triangulation.refine_global(4);
 
   grid_out.write_svg(triangulation, out);
 
